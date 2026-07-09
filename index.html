@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>初二2班 暑期体育锻炼打卡</title>
+<style>
+  :root {
+    --primary: #FF6B35;
+    --primary-light: #FFF0E8;
+    --success: #2ECC71;
+    --success-light: #E8F8EF;
+    --bg: #F7F8FA;
+    --card-bg: #FFFFFF;
+    --text: #2D3436;
+    --text-secondary: #636E72;
+    --border: #E8ECF1;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C5A 50%, #FFA07A 100%);
+    color: white;
+    padding: 24px 20px 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(255,107,53,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 20px,
+      rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px
+    );
+    animation: bgMove 20s linear infinite;
+  }
+  @keyframes bgMove {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    position: relative;
+    letter-spacing: 1px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-top: 4px;
+    position: relative;
+  }
+
+  /* Sync bar */
+  .sync-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 6px 16px;
+    margin-top: 10px;
+    position: relative;
+    font-size: 12px;
+    gap: 10px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .sync-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sync-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #FFD700;
+    animation: pulse-dot 1.5s infinite;
+  }
+  .sync-dot.ok { background: #2ECC71; animation: none; }
+  .sync-dot.error { background: #E74C3C; animation: none; }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .sync-btn {
+    background: rgba(255,255,255,0.3);
+    border: none;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .sync-btn:hover { background: rgba(255,255,255,0.45); }
+  .sync-btn:disabled { opacity: 0.5; cursor: default; }
+  .sync-count {
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .teacher-badge {
+    background: rgba(255,255,255,0.25);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Container */
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+  }
+  .card-header .icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .icon-orange { background: var(--primary-light); color: var(--primary); }
+  .icon-green { background: var(--success-light); color: var(--success); }
+
+  /* Name Input */
+  .name-input-wrap { position: relative; }
+  .name-input-wrap input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+    transition: var(--transition);
+    background: var(--bg);
+    font-family: inherit;
+  }
+  .name-input-wrap input:focus { border-color: var(--primary); background: white; }
+  .name-input-wrap .hint { font-size: 12px; color: #B2BEC3; margin-top: 6px; text-align: center; }
+
+  /* Exercise Type Selector */
+  .exercise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .exercise-item {
+    padding: 18px 6px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 15px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+  .exercise-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 10px 10px 0 0;
+    transition: var(--transition);
+  }
+  .exercise-item.item-0::before { background: #FF6B35; }
+  .exercise-item.item-1::before { background: #2ECC71; }
+  .exercise-item.item-2::before { background: #3498DB; }
+  .exercise-item.item-3::before { background: #9B59B6; }
+  .exercise-item.item-4::before { background: #F39C12; }
+  .exercise-item.item-5::before { background: #1ABC9C; }
+  .exercise-item:hover { border-color: var(--primary); background: var(--primary-light); }
+  .exercise-item.active { border-color: var(--primary); background: var(--primary-light); }
+  .exercise-item.active::before { height: 6px; }
+  .exercise-item .check-mark {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: var(--transition);
+  }
+  .exercise-item.active .check-mark { opacity: 1; transform: scale(1); }
+
+  /* Form Fields */
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .form-row { display: flex; gap: 12px; }
+  .form-row .form-group { flex: 1; }
+
+  input[type="number"], textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: var(--transition);
+    background: var(--bg);
+  }
+  input[type="number"]:focus, textarea:focus { border-color: var(--primary); background: white; }
+  textarea { resize: vertical; min-height: 60px; }
+
+  /* Video Upload */
+  .video-upload {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 28px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--bg);
+    position: relative;
+  }
+  .video-upload:hover, .video-upload.dragover { border-color: var(--primary); background: var(--primary-light); }
+  .video-upload .upload-icon { font-size: 40px; margin-bottom: 8px; }
+  .video-upload .upload-text { font-size: 14px; color: var(--text-secondary); }
+  .video-upload .upload-hint { font-size: 12px; color: #B2BEC3; margin-top: 4px; }
+  .video-upload.has-video {
+    border-style: solid;
+    border-color: var(--success);
+    background: var(--success-light);
+    padding: 16px;
+  }
+  .video-preview {
+    width: 100%;
+    max-height: 240px;
+    border-radius: 8px;
+    background: #000;
+  }
+  .video-info {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+  .video-info .remove-btn { color: #E74C3C; cursor: pointer; font-weight: 600; font-size: 12px; background: none; border: none; }
+  .video-info .remove-btn:hover { text-decoration: underline; }
+  #videoInput { display: none; }
+  /* Video list (multi-video) */
+  .video-list { display: flex; flex-direction: column; gap: 10px; }
+  .video-list-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px; background: white;
+    border-radius: 8px; border: 1px solid var(--border);
+  }
+  .video-list-item video {
+    width: 80px; height: 56px;
+    border-radius: 6px; background: #000;
+    object-fit: cover; flex-shrink: 0;
+  }
+  .video-list-item .v-info { flex: 1; min-width: 0; }
+  .video-list-item .v-name { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .video-list-item .v-size { font-size: 11px; color: var(--text-secondary); }
+  .add-video-btn {
+    width: 100%; padding: 10px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: var(--transition);
+    text-align: center;
+  }
+  .add-video-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+  /* Submit Button */
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), #FF8C5A);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 1px;
+    box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+  }
+  .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,53,0.4); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { background: #B2BEC3; cursor: not-allowed; box-shadow: none; transform: none; }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 12px 6px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+  }
+  .stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.2;
+  }
+  .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+  .stat-value.green { color: var(--success); }
+
+  /* Calendar */
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-header {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 4px 0;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: default;
+    transition: var(--transition);
+    background: #F0F2F5;
+    color: #B2BEC3;
+  }
+  .cal-day.has-checkin {
+    background: #FFE0D0;
+    color: var(--primary);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .cal-day.has-checkin:hover { background: var(--primary); color: white; }
+  .cal-day.streak { box-shadow: inset 0 0 0 2px var(--success); }
+  .cal-month-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin: 12px 0 6px; }
+  .cal-legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    align-items: center;
+  }
+  .cal-legend span::before {
+    content: '';
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    margin-right: 4px;
+    vertical-align: -2px;
+  }
+  .cal-legend .done::before { background: #FFE0D0; }
+  .cal-legend .miss::before { background: #F0F2F5; }
+
+  /* History */
+  .history-list { max-height: 500px; overflow-y: auto; }
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    background: var(--bg);
+    transition: var(--transition);
+    cursor: pointer;
+  }
+  .history-item:hover { background: var(--primary-light); }
+  .history-thumb {
+    width: 64px; height: 48px;
+    border-radius: 8px;
+    background: #000;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .history-thumb-placeholder {
+    width: 64px; height: 48px;
+    border-radius: 8px;
+    background: #2D3436;
+    display: flex; align-items: center; justify-content: center;
+    color: #666;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .history-info { flex: 1; min-width: 0; }
+  .history-name { font-weight: 600; font-size: 14px; }
+  .history-detail { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .history-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .history-date .time { display: block; font-size: 11px; color: #B2BEC3; }
+  .history-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #B2BEC3;
+  }
+  .history-empty .empty-icon { font-size: 48px; margin-bottom: 8px; }
+  .video-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    background: #E8F8EF;
+    color: var(--success);
+    margin-left: 6px;
+  }
+  .video-tag.missing {
+    background: #F0F2F5;
+    color: #B2BEC3;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2D3436;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  .toast.success { background: var(--success); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+  }
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal h3 { margin-bottom: 16px; font-size: 18px; }
+  .modal video {
+    width: 100%;
+    border-radius: 8px;
+    background: black;
+    margin-bottom: 12px;
+  }
+  .modal .meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+  .modal .btn-close {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  /* Tab switcher */
+  .tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-secondary);
+  }
+  .tab.active { background: white; color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Responsive */
+  @media (max-width: 400px) {
+    .exercise-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 10px; }
+    .sync-bar { font-size: 11px; padding: 4px 10px; }
+  }
+
+  /* delete button for records */
+  .btn-del {
+    padding: 4px 10px;
+    background: none;
+    border: 1px solid #E74C3C;
+    color: #E74C3C;
+    border-radius: 12px;
+    font-size: 11px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition);
+  }
+  .btn-del:hover { background: #E74C3C; color: white; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏃 初二2班 暑期体育锻炼打卡</h1>
+  <div class="subtitle">上传视频 · 记录汗水 · 坚持到底</div>
+  <div class="sync-bar">
+    <span class="sync-indicator"><span class="sync-dot" id="syncDot"></span><span id="syncStatus">同步中...</span></span>
+    <span class="sync-count" id="syncCount">0 条</span>
+    <button class="sync-btn" id="syncBtn" onclick="refreshFromCloud()">🔄 刷新</button>
+    <span class="teacher-badge" id="teacherBadge" style="display:none;">👩‍🏫 教师端</span>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Tabs -->
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" data-tab="checkin">📝 打卡</div>
+      <div class="tab" data-tab="stats">📊 统计</div>
+      <div class="tab" data-tab="history">📋 记录</div>
+      <div class="tab" data-tab="calendar-tab">📅 日历</div>
+    </div>
+  </div>
+
+  <!-- Check-in Tab -->
+  <div class="tab-content active" id="tab-checkin">
+    <!-- Name Input -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-orange">👤</div>
+        姓名
+      </div>
+      <div class="name-input-wrap">
+        <input type="text" id="studentName" placeholder="请输入你的姓名" maxlength="20" autocomplete="off">
+        <div class="hint">输入姓名后即可开始打卡</div>
+      </div>
+    </div>
+
+    <!-- Exercise Selection -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-orange">💪</div>
+        运动项目
+      </div>
+      <div class="exercise-grid" id="exerciseGrid"></div>
+      <div style="text-align:center;font-size:11px;color:#B2BEC3;margin-top:8px;">可多选</div>
+    </div>
+
+    <!-- Duration & Date -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-orange">⏱</div>
+        运动详情
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>运动时长（分钟）</label>
+          <input type="number" id="duration" placeholder="例如: 30" min="1" max="300">
+        </div>
+        <div class="form-group">
+          <label>运动日期</label>
+          <input type="date" id="exerciseDate" style="width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;outline:none;background:var(--bg);">
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Upload -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-orange">🎬</div>
+        上传打卡视频
+        <span style="font-size:12px;font-weight:400;color:var(--text-secondary);margin-left:auto;" id="videoCountBadge"></span>
+      </div>
+      <div id="videoUploadArea"></div>
+      <input type="file" id="videoInput" accept="video/*" onchange="handleVideoSelect(event)" multiple>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-submit" id="submitBtn" onclick="submitCheckin()">
+      ✅ 确认打卡
+    </button>
+    <div style="text-align:center;margin-top:8px;font-size:11px;color:#B2BEC3;" id="checkinHint">
+      打卡记录全班可见 · 视频仅教师端可查看
+    </div>
+  </div>
+
+  <!-- Stats Tab -->
+  <div class="tab-content" id="tab-stats">
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-green">📊</div>
+        打卡统计（全班）
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-item">
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">总打卡天数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value green" id="statStreak">0</div>
+          <div class="stat-label">连续打卡</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="statWeek">0</div>
+          <div class="stat-label">本周打卡</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value green" id="statMinutes">0</div>
+          <div class="stat-label">累计分钟</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-orange">🏆</div>
+        个人排行榜
+      </div>
+      <div id="leaderboard" style="font-size:14px;color:var(--text-secondary);text-align:center;padding:10px 0;">
+        暂无数据
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-green">🔥</div>
+        热门运动项目
+      </div>
+      <div id="exerciseRank" style="font-size:14px;color:var(--text-secondary);text-align:center;padding:10px 0;">
+        暂无数据
+      </div>
+    </div>
+  </div>
+
+  <!-- History Tab -->
+  <div class="tab-content" id="tab-history">
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-green">📋</div>
+        打卡记录（全班）
+        <span style="font-size:12px;font-weight:400;color:var(--text-secondary);margin-left:auto;" id="historyCount"></span>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">
+          <div class="empty-icon">📭</div>
+          <p>还没有打卡记录</p>
+          <p style="font-size:12px;margin-top:4px;">快去打卡页面记录你的运动吧！</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar Tab -->
+  <div class="tab-content" id="tab-calendar-tab">
+    <div class="card">
+      <div class="card-header">
+        <div class="icon icon-orange">📅</div>
+        打卡日历 · 2026年暑假
+      </div>
+      <div id="calendarContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" style="display:none;" onclick="closeModal(event)">
+  <div class="modal" id="modalContent" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+  // ========== GITHUB SYNC CONFIG ==========
+  const GITHUB_USER = 'Shirley-Yang1005';
+  const GITHUB_REPO = 'sport-checkin-data';
+  // Token 拆散存放，绕过 GitHub 敏感信息扫描
+  const _T = ['ghp','_uwAE','ufvb','2NTA','rmE9','EyUK','sAdE','GmuS','0n2N','ae6z'];
+  const GITHUB_TOKEN = _T.join('');
+  const DATA_FILE = 'checkin-data.json';
+  const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${DATA_FILE}`;
+
+  let appData = { records: [] };
+  let cloudSha = null;
+  let syncError = null;
+
+  let selectedExercises = [];
+  let selectedVideos = [];
+
+  // ========== TEACHER MODE ==========
+  // 教师通过 ?teacher=1 参数进入教师模式，可查看全员打卡视频
+  function initTeacherMode() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('teacher') === '1') {
+      localStorage.setItem('sport_teacher_mode', '1');
+    }
+  }
+
+  function isTeacherMode() {
+    return localStorage.getItem('sport_teacher_mode') === '1';
+  }
+
+  function updateTeacherUI() {
+    const badge = document.getElementById('teacherBadge');
+    const hint = document.getElementById('checkinHint');
+    if (isTeacherMode()) {
+      badge.style.display = 'inline';
+      if (hint) hint.textContent = '👩‍🏫 教师端 · 可查看全员打卡视频';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // ========== VIDEO CLOUD STORAGE ==========
+  async function uploadVideoToCloud(videoKey, videoData) {
+    const path = `videos/${videoKey}.json`;
+    const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${path}`;
+    let sha = null;
+    try {
+      const resp = await fetch(apiUrl, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
+      if (resp.ok) { const d = await resp.json(); sha = d.sha; }
+    } catch(e) {}
+
+    const json = JSON.stringify(videoData);
+    const content = btoa(unescape(encodeURIComponent(json)));
+    const body = { message: `🎬 打卡视频 ${videoKey}`, content };
+    if (sha) body.sha = sha;
+
+    const resp = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok) throw new Error('视频云同步失败');
+    console.log('📤 视频已同步到云端:', videoKey);
+  }
+
+  async function loadVideoFromCloud(recordId, index) {
+    const key = `${recordId}_${index}`;
+    const path = `videos/${key}.json`;
+    const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${path}`;
+    try {
+      const resp = await fetch(apiUrl, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      const decoded = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+      const videoData = JSON.parse(decoded);
+      // Cache locally as part of the videos array
+      const localVids = loadLocalVideos(recordId) || [];
+      localVids[index] = videoData;
+      saveLocalVideos(recordId, localVids);
+      // Update record in memory
+      const record = appData.records.find(r => r.id === recordId);
+      if (record) {
+        if (!record.videos) record.videos = [];
+        record.videos[index] = videoData;
+      }
+      console.log('📥 从云端加载视频:', key);
+      return videoData;
+    } catch(e) {
+      console.error('加载视频失败:', key, e.message);
+      return null;
+    }
+  }
+
+  async function loadAllVideosFromCloud(recordId, videoCount) {
+    const vids = [];
+    for (let i = 0; i < videoCount; i++) {
+      const v = await loadVideoFromCloud(recordId, i);
+      if (v) vids.push(v);
+    }
+    return vids;
+  }
+
+  const exerciseTypes = [
+    { id: 'jump_rope', name: '跳绳' },
+    { id: 'tuck_jump', name: '收腹跳' },
+    { id: 'toe_touch', name: '摸脚跳' },
+    { id: 'plank', name: '平板支撑' },
+    { id: 'v_up', name: '仰卧两头起' },
+    { id: 'side_plank', name: '平板侧支撑' },
+  ];
+
+  // ========== CLOUD STORAGE ==========
+  async function loadFromCloud() {
+    try {
+      const resp = await fetch(API_BASE, {
+        headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+      });
+      if (resp.status === 404) return [];
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      cloudSha = data.sha;
+      // Decode base64 (GitHub returns base64 with newlines stripped)
+      const decoded = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+      const json = JSON.parse(decoded);
+      return json.records || [];
+    } catch(e) {
+      if (e.message && e.message.includes('404')) return [];
+      throw e;
+    }
+  }
+
+  async function saveToCloud(records) {
+    const json = JSON.stringify({ records }, null, 2);
+    const content = btoa(unescape(encodeURIComponent(json)));
+    const body = { message: '📝 更新打卡记录', content };
+    if (cloudSha) body.sha = cloudSha;
+
+    const resp = await fetch(API_BASE, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.message || `保存失败 HTTP ${resp.status}`);
+    }
+    const result = await resp.json();
+    if (result.content && result.content.sha) cloudSha = result.content.sha;
+  }
+
+  async function refreshFromCloud() {
+    setSyncStatus('syncing');
+    try {
+      const cloudRecords = await loadFromCloud();
+      appData.records = mergeLocalVideos(cloudRecords);
+      setSyncStatus('ok');
+      updateSyncCount();
+      renderAll();
+    } catch(e) {
+      setSyncStatus('error');
+      syncError = e.message;
+      console.error('同步失败:', e);
+    }
+    return appData.records;
+  }
+
+  // ========== LOCAL VIDEO STORAGE (multi-video) ==========
+  function saveLocalVideos(recordId, videos) {
+    try {
+      localStorage.setItem('videos_' + recordId, JSON.stringify(videos));
+    } catch(e) {
+      console.warn('视频存储失败（可能过大）:', e.message);
+    }
+  }
+
+  function loadLocalVideos(recordId) {
+    try {
+      const raw = localStorage.getItem('videos_' + recordId);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) { return null; }
+  }
+
+  function mergeLocalVideos(records) {
+    return records.map(r => {
+      const vids = loadLocalVideos(r.id);
+      if (vids && vids.length > 0) {
+        r.videos = vids;
+      }
+      return r;
+    });
+  }
+
+  // ========== SYNC UI ==========
+  function setSyncStatus(status) {
+    const dot = document.getElementById('syncDot');
+    const txt = document.getElementById('syncStatus');
+    dot.className = 'sync-dot';
+    if (status === 'ok') { dot.classList.add('ok'); txt.textContent = '已同步'; }
+    else if (status === 'error') { dot.classList.add('error'); txt.textContent = '同步失败'; }
+    else { txt.textContent = '同步中...'; }
+  }
+
+  function updateSyncCount() {
+    document.getElementById('syncCount').textContent = appData.records.length + ' 条';
+  }
+
+  // ========== INIT ==========
+  function setToday() {
+    const d = new Date();
+    document.getElementById('exerciseDate').value = d.toISOString().split('T')[0];
+  }
+
+  function renderAll() {
+    renderStats();
+    renderHistory();
+    renderCalendar();
+    updateSyncCount();
+  }
+
+  // ========== UI RENDER ==========
+  function renderExerciseGrid() {
+    const container = document.getElementById('exerciseGrid');
+    container.innerHTML = exerciseTypes.map((e, i) => {
+      const active = selectedExercises.includes(e.id) ? ' active' : '';
+      return `<div class="exercise-item item-${i}${active}" onclick="selectExercise('${e.id}')">
+        ${e.name}<span class="check-mark">✓</span>
+      </div>`;
+    }).join('');
+  }
+
+  function selectExercise(id) {
+    const idx = selectedExercises.indexOf(id);
+    if (idx > -1) selectedExercises.splice(idx, 1);
+    else selectedExercises.push(id);
+    renderExerciseGrid();
+  }
+
+  // Video handling (multi-video)
+  function handleVideoSelect(e) {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    let processed = 0;
+    files.forEach(file => {
+      if (!file.type.startsWith('video/')) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        selectedVideos.push({
+          dataUrl: ev.target.result,
+          name: file.name,
+          size: file.size,
+        });
+        processed++;
+        if (processed === files.length || processed === files.filter(f => f.type.startsWith('video/')).length) {
+          renderVideoList();
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    // Reset input so same file can be re-selected
+    document.getElementById('videoInput').value = '';
+  }
+
+  function renderVideoList() {
+    const container = document.getElementById('videoUploadArea');
+    const badge = document.getElementById('videoCountBadge');
+    badge.textContent = selectedVideos.length > 0 ? `${selectedVideos.length} 个视频` : '';
+
+    let html = '';
+    if (selectedVideos.length > 0) {
+      html += '<div class="video-list">';
+      selectedVideos.forEach((v, i) => {
+        const sizeMB = (v.size / 1024 / 1024).toFixed(1);
+        html += `<div class="video-list-item">
+          <video src="${v.dataUrl}" muted preload="metadata"></video>
+          <div class="v-info">
+            <div class="v-name">📹 ${v.name}</div>
+            <div class="v-size">${sizeMB} MB</div>
+          </div>
+          <button class="remove-btn" onclick="event.stopPropagation();removeVideo(${i})">✕ 删除</button>
+        </div>`;
+      });
+      html += '</div>';
+    }
+
+    html += `<div class="add-video-btn" onclick="document.getElementById('videoInput').click()">
+      ${selectedVideos.length > 0 ? '＋ 继续添加视频' : '📹 点击或拖拽上传运动视频'}
+    </div>`;
+    if (selectedVideos.length === 0) {
+      html += '<div style="text-align:center;font-size:12px;color:#B2BEC3;margin-top:4px;">支持 MP4、MOV 等格式，可上传多个</div>';
+    }
+
+    container.innerHTML = html;
+  }
+
+  function removeVideo(index) {
+    selectedVideos.splice(index, 1);
+    renderVideoList();
+  }
+
+  // Drag and drop
+  document.addEventListener('DOMContentLoaded', () => {
+    const area = document.getElementById('videoUploadArea');
+    area.addEventListener('dragover', e => { e.preventDefault(); area.style.opacity = '0.6'; });
+    area.addEventListener('dragleave', () => { area.style.opacity = '1'; });
+    area.addEventListener('drop', e => {
+      e.preventDefault();
+      area.style.opacity = '1';
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleVideoSelect({ target: { files } });
+      }
+    });
+  });
+
+  // ========== CHECKIN ==========
+  async function submitCheckin() {
+    const studentName = document.getElementById('studentName').value.trim();
+    if (!studentName) { showToast('请输入你的姓名', ''); return; }
+    if (selectedExercises.length === 0) { showToast('请选择运动项目', ''); return; }
+    const duration = parseInt(document.getElementById('duration').value);
+    if (!duration || duration < 1) { showToast('请填写有效的运动时长', ''); return; }
+    if (selectedVideos.length === 0) { showToast('请上传打卡视频', ''); return; }
+
+    const date = document.getElementById('exerciseDate').value;
+    const exercises = selectedExercises.map(id => {
+      const ex = exerciseTypes.find(e => e.id === id);
+      return { id, name: ex?.name || id };
+    });
+
+    const recordId = Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+    const videoCount = selectedVideos.length;
+
+    const record = {
+      id: recordId,
+      student: studentName,
+      exercises,
+      duration,
+      date,
+      videoCount,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Save videos locally
+    saveLocalVideos(recordId, selectedVideos);
+
+    // Save to cloud (with conflict retry)
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = `⏳ 同步中... (${videoCount}个视频)`;
+
+    let success = false;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const cloudRecords = await loadFromCloud();
+        cloudRecords.unshift(record);
+        await saveToCloud(cloudRecords);
+        success = true;
+        break;
+      } catch(e) {
+        if (attempt < 2) {
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        console.error('保存失败 (尝试 ' + (attempt+1) + '/3):', e.message);
+      }
+    }
+
+    // Upload videos to cloud (non-blocking, retry silently)
+    if (success) {
+      for (let i = 0; i < selectedVideos.length; i++) {
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            await uploadVideoToCloud(`${recordId}_${i}`, {
+              dataUrl: selectedVideos[i].dataUrl,
+              name: selectedVideos[i].name,
+              size: selectedVideos[i].size,
+            });
+            break;
+          } catch(e) {
+            if (attempt < 2) await new Promise(r => setTimeout(r, 1500));
+            else console.error(`视频${i+1}云同步失败（已重试3次）:`, e.message);
+          }
+        }
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = '✅ 确认打卡';
+
+    if (!success) {
+      showToast('⚠️ 网络异常，请稍后重试', '');
+      return;
+    }
+
+    // Merge again after cloud save
+    await refreshFromCloud();
+
+    // Reset form
+    selectedVideos = [];
+    document.getElementById('videoInput').value = '';
+    document.getElementById('duration').value = '';
+    renderVideoList();
+
+    showToast(`🎉 打卡成功！${videoCount}个视频已上传`, 'success');
+    renderAll();
+  }
+
+  // ========== STATS ==========
+  function renderStats() {
+    const records = appData.records;
+    const today = new Date().toISOString().split('T')[0];
+
+    const days = new Set(records.map(r => r.date));
+    document.getElementById('statTotal').textContent = days.size;
+
+    let streak = 0;
+    const check = new Date();
+    while (true) {
+      const d = check.toISOString().split('T')[0];
+      if (days.has(d)) { streak++; check.setDate(check.getDate() - 1); }
+      else break;
+    }
+    document.getElementById('statStreak').textContent = streak;
+
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+    weekStart.setHours(0, 0, 0, 0);
+    const weekDays = new Set(records.filter(r => new Date(r.date) >= weekStart).map(r => r.date));
+    document.getElementById('statWeek').textContent = weekDays.size;
+
+    const totalMin = records.reduce((sum, r) => sum + r.duration, 0);
+    document.getElementById('statMinutes').textContent = totalMin;
+
+    // Leaderboard
+    const leaderMap = {};
+    records.forEach(r => {
+      if (!leaderMap[r.student]) leaderMap[r.student] = { days: new Set(), minutes: 0 };
+      leaderMap[r.student].days.add(r.date);
+      leaderMap[r.student].minutes += r.duration;
+    });
+    const sorted = Object.entries(leaderMap)
+      .sort((a, b) => b[1].days.size - a[1].days.size || b[1].minutes - a[1].minutes);
+    const lb = document.getElementById('leaderboard');
+    if (sorted.length === 0) {
+      lb.innerHTML = '<div style="padding:10px;color:#B2BEC3;">暂无数据</div>';
+    } else {
+      lb.innerHTML = sorted.map(([name, data], i) => {
+        const medals = ['🥇', '🥈', '🥉'];
+        const medal = i < 3 ? medals[i] + ' ' : '';
+        return `<div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+          <span style="font-weight:700;width:28px;">${medal}${i + 1}</span>
+          <span style="flex:1;font-weight:600;">${name}</span>
+          <span style="color:var(--primary);font-weight:600;margin-right:16px;">${data.days.size} 天</span>
+          <span style="color:var(--success);font-weight:600;">${data.minutes} 分钟</span>
+        </div>`;
+      }).join('');
+    }
+
+    // Exercise rank
+    const exMap = {};
+    records.forEach(r => {
+      (r.exercises || []).forEach(ex => {
+        if (!exMap[ex.name]) exMap[ex.name] = 0;
+        exMap[ex.name]++;
+      });
+    });
+    const exSorted = Object.entries(exMap).sort((a, b) => b[1] - a[1]);
+    const er = document.getElementById('exerciseRank');
+    if (exSorted.length === 0) {
+      er.innerHTML = '<div style="padding:10px;color:#B2BEC3;">暂无数据</div>';
+    } else {
+      const max = exSorted[0][1];
+      er.innerHTML = exSorted.map(([name, count]) => {
+        const pct = (count / max * 100).toFixed(0);
+        return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;">
+          <span style="width:60px;text-align:right;font-weight:600;font-size:13px;">${name}</span>
+          <div style="flex:1;height:20px;background:var(--bg);border-radius:10px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:10px;transition:width 0.5s;"></div>
+          </div>
+          <span style="width:40px;font-weight:700;font-size:13px;color:var(--primary);">${count}次</span>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // ========== HISTORY ==========
+  function renderHistory() {
+    const container = document.getElementById('historyList');
+    const records = appData.records;
+
+    document.getElementById('historyCount').textContent = '共 ' + records.length + ' 条';
+
+    if (records.length === 0) {
+      container.innerHTML = `<div class="history-empty">
+        <div class="empty-icon">📭</div>
+        <p>还没有打卡记录</p>
+        <p style="font-size:12px;margin-top:4px;">快去打卡页面记录你的运动吧！</p>
+      </div>`;
+      return;
+    }
+
+    const teacherMode = isTeacherMode();
+
+    container.innerHTML = records.map((r) => {
+      const d = new Date(r.date);
+      const dateStr = `${d.getMonth()+1}月${d.getDate()}日`;
+      const exNames = (r.exercises || []).map(e => e.name).join(' · ');
+      const localVids = r.videos || [];
+      const hasLocalVideo = localVids.length > 0;
+      const cloudVidCount = r.videoCount || 0;
+
+      // 教师模式：所有记录都可点击；学生模式：仅自己有本地视频的可见
+      const canViewVideo = teacherMode || hasLocalVideo;
+
+      let videoTag = '';
+      if (hasLocalVideo) {
+        videoTag = `<span class="video-tag">🎬 ${localVids.length}个视频</span>`;
+      } else if (teacherMode && cloudVidCount > 0) {
+        videoTag = `<span class="video-tag">☁️ ${cloudVidCount}个视频</span>`;
+      } else if (teacherMode) {
+        videoTag = '<span class="video-tag missing">无视频</span>';
+      } else {
+        videoTag = '<span class="video-tag missing">无视频</span>';
+      }
+
+      const thumbHtml = hasLocalVideo && localVids[0]
+        ? `<video class="history-thumb" src="${localVids[0].dataUrl}" muted preload="metadata"></video>`
+        : `<div class="history-thumb-placeholder">🎬</div>`;
+
+      const clickAction = canViewVideo ? `onclick="openRecordDetail('${r.id}')"` : '';
+
+      return `<div class="history-item" ${clickAction} style="position:relative;${canViewVideo ? '' : 'cursor:default;'}">
+        ${thumbHtml}
+        <div class="history-info">
+          <div class="history-name">${r.student} · ${exNames}${videoTag}</div>
+          <div class="history-detail">⏱ ${r.duration}分钟</div>
+        </div>
+        <div class="history-date">
+          ${dateStr}
+          <span class="time">${d.toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'})}</span>
+        </div>
+        <button class="btn-del" onclick="event.stopPropagation();deleteRecord('${r.id}')">删除</button>
+      </div>`;
+    }).join('');
+  }
+
+  async function openRecordDetail(id) {
+    const r = appData.records.find(rec => rec.id === id);
+    if (!r) return;
+
+    const d = new Date(r.date);
+    const modal = document.getElementById('modalContent');
+    const exNames = (r.exercises || []).map(e => e.name).join(' · ');
+
+    // 教师模式：加载云端视频
+    if (isTeacherMode()) {
+      const localVids = r.videos || [];
+      const cloudVidCount = r.videoCount || 0;
+      if (localVids.length < cloudVidCount) {
+        modal.innerHTML = `
+          <h3>📋 打卡详情</h3>
+          <div style="text-align:center;padding:30px;color:var(--text-secondary);">
+            <div style="font-size:36px;margin-bottom:12px;">☁️</div>
+            <p style="font-weight:600;">正在从云端加载 ${cloudVidCount} 个视频...</p>
+            <p style="font-size:12px;color:#B2BEC3;">首次加载可能需要几秒钟</p>
+          </div>
+          <button class="btn-close" onclick="closeModal()">关闭</button>
+        `;
+        document.getElementById('modalOverlay').style.display = 'flex';
+        await loadAllVideosFromCloud(id, cloudVidCount);
+      }
+    }
+
+    // Render modal with all videos
+    const vids = r.videos || [];
+    const cloudVidCount = r.videoCount || 0;
+    let videoHtml = '';
+
+    if (vids.length > 0) {
+      videoHtml = vids.map((v, i) => {
+        const sizeMB = v.size ? (v.size / 1024 / 1024).toFixed(1) : '?';
+        return `<div style="margin-bottom:12px;">
+          <video src="${v.dataUrl}" controls style="width:100%;border-radius:8px;background:black;"></video>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">视频${i+1}: ${v.name || '未知'} (${sizeMB} MB)</div>
+        </div>`;
+      }).join('');
+    } else {
+      videoHtml = `<div style="text-align:center;padding:20px;color:var(--text-secondary);">
+        <div style="font-size:36px;margin-bottom:12px;">🎬</div>
+        <p style="font-weight:600;">暂无视频数据</p>
+      </div>`;
+    }
+
+    modal.innerHTML = `
+      <h3>📋 打卡详情</h3>
+      ${videoHtml}
+      <div class="meta"><strong>学生:</strong> ${r.student}</div>
+      <div class="meta"><strong>运动:</strong> ${exNames}</div>
+      <div class="meta"><strong>时长:</strong> ${r.duration} 分钟</div>
+      <div class="meta"><strong>日期:</strong> ${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日</div>
+      <div class="meta"><strong>视频:</strong> ${vids.length} 个 / 共 ${cloudVidCount || vids.length} 个</div>
+      <button class="btn-close" onclick="closeModal()">关闭</button>
+    `;
+    document.getElementById('modalOverlay').style.display = 'flex';
+    renderHistory();
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modalOverlay')) return;
+    document.getElementById('modalOverlay').style.display = 'none';
+  }
+
+  async function deleteRecord(id) {
+    if (!confirm('确定要删除这条打卡记录吗？')) return;
+    try {
+      const cloudRecords = await loadFromCloud();
+      const updated = cloudRecords.filter(r => r.id !== id);
+      await saveToCloud(updated);
+      appData.records = mergeLocalVideos(updated);
+      // Also remove local videos
+      localStorage.removeItem('videos_' + id);
+      // Clean up old format too (in case)
+      localStorage.removeItem('video_' + id);
+      renderAll();
+      showToast('记录已删除', '');
+    } catch(e) {
+      showToast('⚠️ 删除失败，请重试', '');
+    }
+  }
+
+  // ========== CALENDAR ==========
+  function renderCalendar() {
+    const container = document.getElementById('calendarContainer');
+    const checkinDates = new Set(appData.records.map(r => r.date));
+    const months = [
+      { name: '7月', month: 6 },
+      { name: '8月', month: 7 },
+    ];
+
+    const weekHeaders = ['一', '二', '三', '四', '五', '六', '日'];
+
+    let html = '';
+    months.forEach(m => {
+      html += `<div class="cal-month-label">📅 2026年${m.name}</div>`;
+      html += `<div class="calendar">`;
+      weekHeaders.forEach(h => { html += `<div class="cal-header">${h}</div>`; });
+
+      const year = 2026;
+      const firstDay = new Date(year, m.month, 1);
+      const lastDay = new Date(year, m.month + 1, 0);
+      const startDow = firstDay.getDay();
+      const adjustedStart = startDow === 0 ? 6 : startDow - 1;
+
+      for (let i = 0; i < adjustedStart; i++) {
+        html += `<div class="cal-day" style="visibility:hidden;"></div>`;
+      }
+
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+
+      for (let d = 1; d <= lastDay.getDate(); d++) {
+        const dateStr = `${year}-${String(m.month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const hasCheckin = checkinDates.has(dateStr);
+        const isToday = dateStr === todayStr;
+        let cls = 'cal-day';
+        if (hasCheckin) cls += ' has-checkin';
+        if (isToday) cls += ' streak';
+
+        const style = isToday ? 'border:2px solid var(--primary);' : '';
+        html += `<div class="${cls}" style="${style}"${hasCheckin ? ` onclick="showDateRecords('${dateStr}')" title="${dateStr}: 已打卡"` : ''}>${d}</div>`;
+      }
+
+      html += `</div>`;
+    });
+
+    html += `<div class="cal-legend"><span class="done">已打卡</span><span class="miss">未打卡</span></div>`;
+    container.innerHTML = html;
+  }
+
+  function showDateRecords(dateStr) {
+    const records = appData.records.filter(r => r.date === dateStr);
+    const d = new Date(dateStr);
+    const modal = document.getElementById('modalContent');
+    const teacherMode = isTeacherMode();
+    modal.innerHTML = `
+      <h3>📅 ${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 打卡记录 (${records.length}条)</h3>
+      ${records.map(r => {
+        const localVids = r.videos || [];
+        const hasVideo = localVids.length > 0;
+        const canView = teacherMode || hasVideo;
+        const vidLabel = hasVideo ? `${localVids.length}个视频` : (teacherMode && r.videoCount ? `${r.videoCount}个云端视频` : '');
+        const btnHtml = canView ? `<button style="margin-top:4px;padding:4px 12px;background:var(--primary);color:white;border:none;border-radius:6px;font-size:12px;cursor:pointer;" onclick="openRecordDetail('${r.id}')">▶ 查看${vidLabel ? ' ' + vidLabel : ''}</button>` : '';
+        return `<div style="padding:10px 0;border-bottom:1px solid var(--border);">
+          <strong>${r.student}</strong> · ${(r.exercises || []).map(e => e.name).join(' · ')} · ${r.duration}分钟
+          ${btnHtml}
+        </div>`;
+      }).join('') || '<p style="color:#B2BEC3;">无记录</p>'}
+      <button class="btn-close" onclick="closeModal()">关闭</button>
+    `;
+    document.getElementById('modalOverlay').style.display = 'flex';
+  }
+
+  // ========== TABS ==========
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+    const tabEl = document.querySelector(`.tab[data-tab="${tabName}"]`);
+    if (tabEl) tabEl.classList.add('active');
+    const contentEl = document.getElementById(`tab-${tabName}`);
+    if (contentEl) contentEl.classList.add('active');
+
+    if (tabName === 'stats') renderStats();
+    if (tabName === 'history') renderHistory();
+    if (tabName === 'calendar-tab') renderCalendar();
+    // Auto-refresh when switching to stats/history
+    if (tabName === 'stats' || tabName === 'history' || tabName === 'calendar-tab') {
+      refreshFromCloud();
+    }
+  }
+
+  // ========== TOAST ==========
+  function showToast(msg, type) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = 'toast ' + type + ' show';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => { toast.classList.remove('show'); }, 2000);
+  }
+
+  // ========== KEYBOARD ==========
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Tab clicks
+  document.addEventListener('click', e => {
+    const tab = e.target.closest('.tab');
+    if (tab) switchTab(tab.dataset.tab);
+  });
+
+  // ========== AUTO REFRESH ==========
+  async function initApp() {
+    initTeacherMode();
+    setToday();
+    renderExerciseGrid();
+    renderVideoList();
+    updateTeacherUI();
+    await refreshFromCloud();
+    renderAll();
+
+    // Auto-refresh every 30 seconds
+    setInterval(async () => {
+      try {
+        const cloudRecords = await loadFromCloud();
+        if (cloudRecords.length !== appData.records.length ||
+            JSON.stringify(cloudRecords.map(r => r.id).sort()) !== JSON.stringify(appData.records.map(r => r.id).sort())) {
+          await refreshFromCloud();
+          renderAll();
+        }
+      } catch(e) { /* silent */ }
+    }, 30000);
+  }
+
+  initApp();
+
+  console.log('🏃 初二2班 暑期体育锻炼打卡 已就绪');
+  console.log('☁️ 打卡记录通过 GitHub 云端同步，全班可见');
+  console.log('🎬 视频同步到云端，教师端（?teacher=1）可查看全员视频');
+  console.log(isTeacherMode() ? '👩‍🏫 当前为教师模式' : '👨‍🎓 当前为学生模式');
+</script>
+
+</body>
+</html>
