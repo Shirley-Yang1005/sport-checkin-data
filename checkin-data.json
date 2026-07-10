@@ -1,6 +1,32 @@
 {
   "records": [
     {
+      "id": "mred125qdw3j",
+      "student": "肖淋君",
+      "exercises": [
+        {
+          "id": "v_up",
+          "name": "仰卧两头起"
+        },
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        },
+        {
+          "id": "tuck_jump",
+          "name": "收腹跳"
+        },
+        {
+          "id": "toe_touch",
+          "name": "摸脚跳"
+        }
+      ],
+      "duration": 15,
+      "date": "2026-07-10",
+      "videoCount": 3,
+      "createdAt": "2026-07-10T03:12:24.110Z"
+    },
+    {
       "id": "mrbveyifl61o",
       "student": "杨雪龄",
       "exercises": [
