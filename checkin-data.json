@@ -1,6 +1,24 @@
 {
   "records": [
     {
+      "id": "mrj7jdnneimq",
+      "student": "徐安狄",
+      "exercises": [
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        },
+        {
+          "id": "v_up",
+          "name": "仰卧两头起"
+        }
+      ],
+      "duration": 15,
+      "date": "2026-07-13",
+      "videoCount": 3,
+      "createdAt": "2026-07-13T12:37:32.005Z"
+    },
+    {
       "id": "mrj7g2tum1tw",
       "student": "徐安狄",
       "exercises": [
