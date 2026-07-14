@@ -1,6 +1,28 @@
 {
   "records": [
     {
+      "id": "mrkjwjjm72xt",
+      "student": "罗浩洋",
+      "exercises": [
+        {
+          "id": "jump_rope",
+          "name": "跳绳"
+        },
+        {
+          "id": "tuck_jump",
+          "name": "收腹跳"
+        },
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        }
+      ],
+      "duration": 30,
+      "date": "2026-07-14",
+      "videoCount": 3,
+      "createdAt": "2026-07-14T11:11:27.730Z"
+    },
+    {
       "id": "mrkfo8pvlpcl",
       "student": "徐安狄",
       "exercises": [
