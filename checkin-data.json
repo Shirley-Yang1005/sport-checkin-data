@@ -1,6 +1,28 @@
 {
   "records": [
     {
+      "id": "mrk224u6uilm",
+      "student": "林子暄",
+      "exercises": [
+        {
+          "id": "jump_rope",
+          "name": "跳绳"
+        },
+        {
+          "id": "tuck_jump",
+          "name": "收腹跳"
+        },
+        {
+          "id": "toe_touch",
+          "name": "摸脚跳"
+        }
+      ],
+      "duration": 30,
+      "date": "2026-07-13",
+      "videoCount": 3,
+      "createdAt": "2026-07-14T02:51:55.519Z"
+    },
+    {
       "id": "mrj7g2tum1tw",
       "student": "徐安狄",
       "exercises": [
