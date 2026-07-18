@@ -1,6 +1,40 @@
 {
   "records": [
     {
+      "id": "mrqa93wqlbs2",
+      "student": "徐安狄",
+      "exercises": [
+        {
+          "id": "jump_rope",
+          "name": "跳绳"
+        },
+        {
+          "id": "toe_touch",
+          "name": "摸脚跳"
+        },
+        {
+          "id": "v_up",
+          "name": "仰卧两头起"
+        },
+        {
+          "id": "tuck_jump",
+          "name": "收腹跳"
+        },
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        },
+        {
+          "id": "side_plank",
+          "name": "平板侧支撑"
+        }
+      ],
+      "duration": 30,
+      "date": "2026-07-18",
+      "videoCount": 6,
+      "createdAt": "2026-07-18T11:27:54.891Z"
+    },
+    {
       "id": "mroyfxe3vf1e",
       "student": "伊蔡恩祺",
       "exercises": [
