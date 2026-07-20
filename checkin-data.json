@@ -1,6 +1,28 @@
 {
   "records": [
     {
+      "id": "mrt92zb75r3l",
+      "student": "徐安狄",
+      "exercises": [
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        },
+        {
+          "id": "v_up",
+          "name": "仰卧两头起"
+        },
+        {
+          "id": "side_plank",
+          "name": "平板侧支撑"
+        }
+      ],
+      "duration": 15,
+      "date": "2026-07-20",
+      "videoCount": 3,
+      "createdAt": "2026-07-20T13:18:27.908Z"
+    },
+    {
       "id": "mrrmwbxiy1t2",
       "student": "伊蔡恩祺",
       "exercises": [
