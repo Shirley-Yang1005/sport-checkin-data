@@ -1,6 +1,28 @@
 {
   "records": [
     {
+      "id": "ms368585dua1",
+      "student": "冯继",
+      "exercises": [
+        {
+          "id": "jump_rope",
+          "name": "跳绳"
+        },
+        {
+          "id": "side_plank",
+          "name": "平板侧支撑"
+        },
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        }
+      ],
+      "duration": 42,
+      "date": "2026-07-27",
+      "videoCount": 3,
+      "createdAt": "2026-07-27T11:56:11.765Z"
+    },
+    {
       "id": "ms31euazx8rq",
       "student": "徐安狄",
       "exercises": [
