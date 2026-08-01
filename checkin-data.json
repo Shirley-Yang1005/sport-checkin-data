@@ -1,6 +1,32 @@
 {
   "records": [
     {
+      "id": "msa6pqtjbmph",
+      "student": "冯继",
+      "exercises": [
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        },
+        {
+          "id": "side_plank",
+          "name": "平板侧支撑"
+        },
+        {
+          "id": "v_up",
+          "name": "仰卧两头起"
+        },
+        {
+          "id": "tuck_jump",
+          "name": "收腹跳"
+        }
+      ],
+      "duration": 48,
+      "date": "2026-07-30",
+      "videoCount": 5,
+      "createdAt": "2026-08-01T09:44:16.135Z"
+    },
+    {
       "id": "ms8ztkt0nlgj",
       "student": "徐安狄",
       "exercises": [
