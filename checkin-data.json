@@ -1,6 +1,32 @@
 {
   "records": [
     {
+      "id": "msed89ylfvzu",
+      "student": "肖淋君",
+      "exercises": [
+        {
+          "id": "jump_rope",
+          "name": "跳绳"
+        },
+        {
+          "id": "plank",
+          "name": "平板支撑"
+        },
+        {
+          "id": "toe_touch",
+          "name": "摸脚跳"
+        },
+        {
+          "id": "tuck_jump",
+          "name": "收腹跳"
+        }
+      ],
+      "duration": 30,
+      "date": "2026-08-04",
+      "videoCount": 4,
+      "createdAt": "2026-08-04T07:57:43.149Z"
+    },
+    {
       "id": "msd42wgg94ay",
       "student": "徐安狄",
       "exercises": [
